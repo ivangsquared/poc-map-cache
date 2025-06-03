@@ -1,4 +1,4 @@
-// Types for ESRI API responses
+
 export interface ESRIFeature {
   attributes: Record<string, any>;
   geometry: {
@@ -21,12 +21,6 @@ export interface EIPResponse {
   }>;
   exceededTransferLimit?: boolean;
 }
-
-// ESRI API Client for Delta EIP - Simplified for PoC
-
-// Configuration - In a real app, these would be in environment variables
-const API_BASE_URL = process.env.ESRI_BASE_URL || 'https://services.arcgis.com/abc123/arcgis/rest/services';
-const API_KEY = process.env.ESRI_API_KEY || 'your-api-key';
 
 
 /**
@@ -86,7 +80,7 @@ export async function fetchDeltaEIPData(
       f: 'pjson'
     });
     const fetchUrl = `${url}?${params.toString()}`;
-
+    console.log('Fetching EIP data from:', fetchUrl);
     const res = await fetch(fetchUrl, {
       headers: {
         'x-Gateway-APIKey': apiKey,
@@ -165,33 +159,3 @@ export function processEIPData(data: any): any[] {
     type: 'luminaire' // Default type, can be overridden
   }));
 }
-
-// For testing - Mock data for testing
-export const mockEIPData = {
-  features: [
-    {
-      attributes: {
-        OBJECTID: 1,
-        AssetID: 'LUM-001',
-        Status: 'Active',
-        LastInspection: new Date().toISOString(),
-      },
-      geometry: {
-        x: 144.9631,
-        y: -37.8136
-      }
-    },
-    {
-      attributes: {
-        OBJECTID: 2,
-        AssetID: 'LUM-002',
-        Status: 'Outage',
-        LastInspection: new Date(Date.now() - 86400000).toISOString(),
-      },
-      geometry: {
-        x: 144.9731,
-        y: -37.8236
-      }
-    }
-  ]
-};

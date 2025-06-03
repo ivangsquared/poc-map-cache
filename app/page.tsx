@@ -11,23 +11,10 @@ export default function Home() {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      
-      // Simulate API call - replace with actual fetch to /api/sync
-      console.log('Fetching data for type:', dataType);
-      
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Simulate response data
-      const mockData = Array(5).fill(0).map((_, i) => ({
-        id: `item-${i}`,
-        name: `Sample ${dataType} ${i + 1}`,
-        status: i % 2 === 0 ? 'active' : 'inactive',
-        lastUpdated: new Date().toISOString(),
-        location: { lat: 51.5074 + (i * 0.1), lng: -0.1278 + (i * 0.1) }
-      }));
-      
-      setData(mockData);
+      const response = await fetch(`/api/pins?type=${dataType}&offset=0&limit=1000`);
+      if (!response.ok) throw new Error('Failed to fetch data');
+      const result = await response.json();
+      setData(result.data); // Adjust if your API response uses a different structure
       setLastSync(new Date());
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -35,7 +22,7 @@ export default function Home() {
       setIsLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchData();
   }, [dataType]);

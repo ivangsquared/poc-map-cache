@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { loadPinsChunkFromCache, savePinsChunkToCache, clearPinsCache } from './map-cache';
+import { loadPinsChunkFromCache, savePinsChunkToCache } from './map-cache';
 
 
 // Dynamically import the map component to avoid SSR issues with Leaflet
@@ -12,7 +12,7 @@ const MapWithNoSSR = dynamic(
 );
 
 export default function MapPage() {
-  const [mapData, setMapData] = useState<any[]>([]);
+  const [mapData, setMapData] = useState<unknown[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
