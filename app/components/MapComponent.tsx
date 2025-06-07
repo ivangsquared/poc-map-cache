@@ -3,7 +3,7 @@
 import React from 'react';
 
 interface MapComponentProps {
-  data: any[];
+  data: { [key: string]: unknown }[];
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({ data }) => {

@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const offset = parseInt(searchParams.get('offset') || '0', 10);
     const limit = parseInt(searchParams.get('limit') || '1000', 10);
 
-    let pinsData: any[] = [];
+    let pinsData = [];
     let version = '';
     let url = '';
 

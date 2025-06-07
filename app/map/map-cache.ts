@@ -2,7 +2,7 @@
 // Utility for frontend map pin caching with versioning and chunk support
 
 export interface PinChunk {
-  data: any[];
+  data: { [key: string]: unknown }[];
   version: string;
   url: string;
   offset: number;

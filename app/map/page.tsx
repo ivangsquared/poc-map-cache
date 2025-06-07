@@ -12,10 +12,10 @@ const MapWithNoSSR = dynamic(
 );
 
 export default function MapPage() {
-  const [mapData, setMapData] = useState<unknown[]>([]);
+  const [mapData, setMapData] = useState<Array<{[key: string]: unknown}>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [offset, setOffset] = useState(0);
+  const [, setOffset] = useState(0);
   const [limit] = useState(1000);
   const [total, setTotal] = useState<number | null>(null);
 
@@ -24,10 +24,17 @@ export default function MapPage() {
       setIsLoading(true);
       // Try to get chunk from cache
       const cached = loadPinsChunkFromCache(offsetVal, limit);
-      let chunkData = cached?.data;
-      let version = cached?.version;
-      let url = cached?.url;
-      let totalPins = cached?.total;
+      let chunkData: { [key: string]: unknown }[] = [];
+      let version = '';
+      let url = '';
+      let totalPins = 0;
+      
+      if (cached) {
+        chunkData = cached.data || [];
+        version = cached.version || '';
+        url = cached.url || '';
+        totalPins = cached.total || 0;
+      }
 
       if (!chunkData || !version || !url) {
         // Fetch from API
@@ -41,7 +48,7 @@ export default function MapPage() {
         savePinsChunkToCache({ data: chunkData, version, url, offset: offsetVal, limit, total: totalPins });
       }
       // Append or set map data
-      setMapData(prev => offsetVal === 0 ? (chunkData || []) : [...prev, ...(chunkData || [])]);
+      setMapData(prev => offsetVal === 0 ? chunkData : [...prev, ...chunkData]);
       setTotal(typeof totalPins === 'number' ? totalPins : (totalPins ? parseInt(totalPins) : 0));
     } catch (err) {
       console.error('Error loading map pins chunk:', err);
@@ -77,7 +84,7 @@ export default function MapPage() {
     <div className="h-screen w-full">
       <h1 className="text-2xl font-bold p-4 bg-white shadow">EIP Map Viewer</h1>
       <div className="h-[calc(100vh-4rem)] w-full">
-        <MapWithNoSSR data={mapData} />
+        <MapWithNoSSR data={mapData as { [key: string]: unknown }[]} />
         {canLoadMore && (
           <div className="flex justify-center my-4">
             <button

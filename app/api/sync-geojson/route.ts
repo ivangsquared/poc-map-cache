@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchDeltaEIPData, processEIPData } from '@/lib/delta-eip';
 import { uploadToSitecore, getLastSyncDate, updateLastSyncDate } from '../../../lib/sitecore-upload';
+import { processFeaturesToSitecoreItems } from '../../../lib/sitecore-mapper';
 
 type EIPDataType = 'luminaire' | 'outage-area' | 'outage-point';
 
@@ -30,11 +31,20 @@ export async function GET() {
           continue;
         }
 
-        // Process the data
+        // Process the data to extract features
         const processedData = processEIPData(esriData);
         
+        // Map the ESRI features to Sitecore items
+        const sitecoreItems = processFeaturesToSitecoreItems(
+          processedData.map(item => ({
+            attributes: { ...item },
+            geometry: item.geometry
+          })),
+          type as 'luminaire' | 'outage-area' | 'outage-point'
+        );
+        
         // Upload to Sitecore
-        const uploadResult = await uploadToSitecore(processedData);
+        const uploadResult = await uploadToSitecore(sitecoreItems);
         
         // Update last sync date if successful
         if (uploadResult.success && lastSyncDate) {
