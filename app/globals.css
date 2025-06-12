@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
 :root {
+  /* Light theme (default) */
   --background: #ffffff;
   --foreground: #171717;
+  --text-muted: #6b7280;
+  --border-color: #e5e7eb;
+  --popup-bg: #ffffff;
+  --popup-text: #171717;
+  --popup-border: #e5e7eb;
+  --marker-cluster-bg: rgba(59, 130, 246, 0.6);
+  --marker-cluster-text: #ffffff;
+  --marker-cluster-inner: rgba(37, 99, 235, 0.8);
 }
 
 @theme inline {
@@ -14,8 +23,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1a1a1a;
+    --foreground: #1a1a1a;
+    --text-muted: #a3a3a3;
+    --border-color: #333333;
+    --popup-bg: #2d2d2d;
+    --popup-text: #1a1a1a;
+    --popup-border: #404040;
+    --marker-cluster-bg: rgba(29, 78, 216, 0.7);
+    --marker-cluster-text: #f8fafc;
+    --marker-cluster-inner: rgba(30, 58, 138, 0.9);
   }
 }
 
@@ -23,4 +40,101 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Leaflet Map Container */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  background: var(--background);
+}
+
+/* Popup Styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  background: var(--popup-bg);
+  color: var(--popup-text);
+  border: 1px solid var(--popup-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px;
+  line-height: 1.5;
+  color: var(--popup-text);
+}
+
+.leaflet-popup-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--popup-text);
+}
+
+.leaflet-popup-content p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.leaflet-popup-tip {
+  background: var(--popup-bg);
+  border: 1px solid var(--popup-border);
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+
+/* Marker Cluster Styles */
+.marker-cluster {
+  background: var(--marker-cluster-bg);
+  border-radius: 50%;
+  text-align: center;
+  color: var(--marker-cluster-text);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-cluster div {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  background-color: var(--marker-cluster-inner);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--marker-cluster-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile {
+    filter: brightness(0.6) contrast(1.1);
+  }
+
+  .leaflet-control {
+    background-color: var(--popup-bg);
+    color: var(--popup-text);
+  }
+
+  .leaflet-bar a {
+    background-color: var(--popup-bg);
+    color: var(--popup-text);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .leaflet-bar a:hover {
+    background-color: var(--background);
+  }
 }

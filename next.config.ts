@@ -1,12 +1,26 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Webpack configuration
+  webpack: (config) => {
+    // This is needed for Leaflet to work with Next.js
+    config.resolve.fallback = { fs: false };
+    return config;
+  },
+  
   // Configure image domains
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
     domains: [
       'your-sitecore-instance.com',
       '*.arcgis.com',  // For ESRI assets
-      '*.amazonaws.com'  // If using S3 for assets
+      '*.amazonaws.com',  // If using S3 for assets
+      'tile.openstreetmap.org'  // For OpenStreetMap tiles
     ],
   },
   
@@ -25,13 +39,22 @@ const nextConfig: NextConfig = {
     SITECORE_API_KEY: process.env.SITECORE_API_KEY,
   },
   
-  // Experimental features
+  // Server actions configuration
   experimental: {
     serverActions: {
-      bodySizeLimit: '2mb',
+      bodySizeLimit: '10mb',
     },
-    // Enable external packages for server components
-    serverComponentsExternalPackages: ['@esri/arcgis-rest-request'],
+  },
+  
+  // External packages for server components
+  serverExternalPackages: ['@esri/arcgis-rest-request'],
+  
+  // API route configuration
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+    responseLimit: '10mb',
   },
 };
 

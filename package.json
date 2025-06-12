@@ -9,10 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/classnames": "^2.3.0",
+    "@types/csv-parse": "^1.1.12",
     "@vercel/blob": "^1.1.1",
+    "classnames": "^2.5.1",
+    "clsx": "^2.1.1",
+    "csv-parse": "^5.6.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.513.0",
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0",
+    "tailwind-merge": "^3.3.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
